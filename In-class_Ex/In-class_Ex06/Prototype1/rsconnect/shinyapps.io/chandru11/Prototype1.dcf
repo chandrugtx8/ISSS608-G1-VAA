@@ -1,0 +1,12 @@
+name: Prototype1
+title: Prototype1
+username: chandru11
+account: chandru11
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16729695
+bundleId: 11610430
+url: https://chandru11.shinyapps.io/Prototype1/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
