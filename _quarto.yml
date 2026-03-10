@@ -37,6 +37,10 @@ website:
         menu:
           - text: "Take home Exercise 1"
             href: "Take-home_Ex/Take-home_Ex01/Take_home_ex.html"  
+      - text: "Project"
+        menu:
+          - text: "Visual analytics Project"
+            href: "Visual_analytics_proj/vis_project.html"   
     right:
       - href: index.qmd
         text: Home
