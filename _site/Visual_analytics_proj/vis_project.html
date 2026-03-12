@@ -232,14 +232,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#the-objective" id="toc-the-objective" class="nav-link active" data-scroll-target="#the-objective">The Objective</a></li>
   <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
-  <li><a href="#variable-selection-for-clustering" id="toc-variable-selection-for-clustering" class="nav-link" data-scroll-target="#variable-selection-for-clustering">Variable Selection for Clustering</a></li>
+  <li><a href="#variable-selection-for-clustering" id="toc-variable-selection-for-clustering" class="nav-link" data-scroll-target="#variable-selection-for-clustering">Variable Selection for Clustering</a>
+  <ul class="collapse">
+  <li><a href="#feature-correlation-heatmap" id="toc-feature-correlation-heatmap" class="nav-link" data-scroll-target="#feature-correlation-heatmap">Feature Correlation Heatmap</a></li>
+  </ul></li>
   <li><a href="#handling-missing-values" id="toc-handling-missing-values" class="nav-link" data-scroll-target="#handling-missing-values">Handling Missing Values</a></li>
   <li><a href="#data-standardization" id="toc-data-standardization" class="nav-link" data-scroll-target="#data-standardization">Data Standardization</a></li>
-  <li><a href="#determining-the-optimal-number-of-clusters" id="toc-determining-the-optimal-number-of-clusters" class="nav-link" data-scroll-target="#determining-the-optimal-number-of-clusters">Determining the Optimal Number of Clusters</a></li>
+  <li><a href="#determining-the-optimal-number-of-clusters" id="toc-determining-the-optimal-number-of-clusters" class="nav-link" data-scroll-target="#determining-the-optimal-number-of-clusters">Determining the Optimal Number of Clusters</a>
+  <ul class="collapse">
+  <li><a href="#silhouette-analysis" id="toc-silhouette-analysis" class="nav-link" data-scroll-target="#silhouette-analysis">Silhouette Analysis</a></li>
+  </ul></li>
   <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering">K-Means Clustering</a></li>
   <li><a href="#cluster-distribution" id="toc-cluster-distribution" class="nav-link" data-scroll-target="#cluster-distribution">Cluster Distribution</a></li>
-  <li><a href="#cluster-visualization" id="toc-cluster-visualization" class="nav-link" data-scroll-target="#cluster-visualization">Cluster Visualization</a></li>
-  <li><a href="#cluster-profiling" id="toc-cluster-profiling" class="nav-link" data-scroll-target="#cluster-profiling">Cluster Profiling</a></li>
+  <li><a href="#cluster-visualization" id="toc-cluster-visualization" class="nav-link" data-scroll-target="#cluster-visualization">Cluster Visualization</a>
+  <ul class="collapse">
+  <li><a href="#variance-explained-by-principal-components" id="toc-variance-explained-by-principal-components" class="nav-link" data-scroll-target="#variance-explained-by-principal-components">Variance Explained by Principal Components</a></li>
+  </ul></li>
+  <li><a href="#cluster-profiling" id="toc-cluster-profiling" class="nav-link" data-scroll-target="#cluster-profiling">Cluster Profiling</a>
+  <ul class="collapse">
+  <li><a href="#comparison-of-cluster-characteristics" id="toc-comparison-of-cluster-characteristics" class="nav-link" data-scroll-target="#comparison-of-cluster-characteristics">Comparison of Cluster Characteristics</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -403,63 +415,110 @@ date (1): date
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>customer_lifetime_value</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="feature-correlation-heatmap" class="level3">
+<h3 class="anchored" data-anchor-id="feature-correlation-heatmap">Feature Correlation Heatmap</h3>
+<p>The correlation heatmap was used to examine relationships between selected variables. Highly correlated variables were evaluated to avoid redundancy in clustering.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.95 loaded</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(cluster_data, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(cor_matrix,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"color"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">type =</span> <span class="st">"upper"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">tl.cex =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="vis_project_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="handling-missing-values" class="level2">
 <h2 class="anchored" data-anchor-id="handling-missing-values">Handling Missing Values</h2>
 <p>Before performing clustering, missing values were handled to ensure data quality and prevent errors during analysis. Observations containing missing values were removed to create a clean dataset for clustering.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cluster_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(cluster_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cluster_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(cluster_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-standardization" class="level2">
 <h2 class="anchored" data-anchor-id="data-standardization">Data Standardization</h2>
 <p>Since the selected variables are measured on different scales (e.g., transaction volume, satisfaction scores, and login frequency), the data was standardized. Standardization ensures that all variables contribute equally to the clustering process.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cluster_scaled <span class="ot">&lt;-</span> <span class="fu">scale</span>(cluster_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cluster_scaled <span class="ot">&lt;-</span> <span class="fu">scale</span>(cluster_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="determining-the-optimal-number-of-clusters" class="level2">
 <h2 class="anchored" data-anchor-id="determining-the-optimal-number-of-clusters">Determining the Optimal Number of Clusters</h2>
 <p>Because the dataset is relatively large, a random sample was used to determine the optimal number of clusters using the Elbow Method. This reduces memory usage while still providing a reliable estimate of the appropriate cluster count.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># take a sample for elbow method</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>cluster_sample <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cluster_scaled) <span class="sc">%&gt;%</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">10000</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># compute WSS manually</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>wss <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">10</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(cluster_sample, <span class="at">centers =</span> i, <span class="at">nstart =</span> <span class="dv">10</span>)</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  wss[i] <span class="ot">&lt;-</span> km<span class="sc">$</span>tot.withinss</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># plot elbow curve</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, wss, <span class="at">type =</span> <span class="st">"b"</span>,</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Clusters"</span>,</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Within-cluster Sum of Squares"</span>,</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Elbow Method for Optimal Number of Clusters"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># take a sample for elbow method</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>cluster_sample <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cluster_scaled) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">10000</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># compute WSS manually</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>wss <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">10</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(cluster_sample, <span class="at">centers =</span> i, <span class="at">nstart =</span> <span class="dv">10</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  wss[i] <span class="ot">&lt;-</span> km<span class="sc">$</span>tot.withinss</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co"># plot elbow curve</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, wss, <span class="at">type =</span> <span class="st">"b"</span>,</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Clusters"</span>,</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Within-cluster Sum of Squares"</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Elbow Method for Optimal Number of Clusters"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="vis_project_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="vis_project_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="silhouette-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="silhouette-analysis">Silhouette Analysis</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sil_width <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">9</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(cluster_sample, <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">10</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  ss <span class="ot">&lt;-</span> <span class="fu">silhouette</span>(km<span class="sc">$</span>cluster, <span class="fu">dist</span>(cluster_sample))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  sil_width[k <span class="sc">-</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(ss[, <span class="dv">3</span>])</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>, sil_width, <span class="at">type =</span> <span class="st">"b"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Clusters"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Average Silhouette Width"</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Silhouette Analysis for Optimal Number of Clusters"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="vis_project_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(cluster_scaled, <span class="at">centers =</span> <span class="dv">4</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(cluster_scaled, <span class="at">centers =</span> <span class="dv">4</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
 </section>
 <section id="k-means-clustering" class="level2">
 <h2 class="anchored" data-anchor-id="k-means-clustering">K-Means Clustering</h2>
 <p>Assign Cluster Labels to Dataset</p>
 <p>After performing K-Means clustering, the cluster labels generated by the algorithm were appended to the dataset. This allows each customer to be associated with a specific cluster for further analysis and visualization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>customer_data<span class="sc">$</span>cluster <span class="ot">&lt;-</span> kmeans_model<span class="sc">$</span>cluster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>customer_data<span class="sc">$</span>cluster <span class="ot">&lt;-</span> kmeans_model<span class="sc">$</span>cluster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="cluster-distribution" class="level2">
@@ -467,7 +526,7 @@ date (1): date
 <p>The distribution of customers across clusters was examined to understand how the dataset was segmented. This helps identify whether the clusters are balanced or dominated by a particular group.</p>
 <p>Code</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(customer_data<span class="sc">$</span>cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(customer_data<span class="sc">$</span>cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     1     2     3     4 
@@ -475,17 +534,17 @@ date (1): date
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(customer_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(cluster))) <span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Customer Distribution by Cluster"</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cluster"</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Customers"</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(customer_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(cluster))) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Customer Distribution by Cluster"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cluster"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Customers"</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="vis_project_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="vis_project_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -495,11 +554,29 @@ date (1): date
 <h2 class="anchored" data-anchor-id="cluster-visualization">Cluster Visualization</h2>
 <p>To better understand the separation between clusters, the clustering results were visualized using dimensionality reduction techniques. This visualization provides an overview of how customers are grouped based on their behavioral and financial characteristics.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(kmeans_model, <span class="at">data =</span> cluster_scaled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(kmeans_model, <span class="at">data =</span> cluster_scaled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="vis_project_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="vis_project_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="variance-explained-by-principal-components" class="level3">
+<h3 class="anchored" data-anchor-id="variance-explained-by-principal-components">Variance Explained by Principal Components</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pca_model <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(cluster_scaled)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_eig</span>(pca_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_bar(stat = "identity", fill = barfill, color = barcolor, :
+Ignoring empty aesthetic: `width`.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="vis_project_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -507,21 +584,21 @@ date (1): date
 <p>Analyze Cluster Characteristics</p>
 <p>To interpret the meaning of each cluster, the average values of key variables were calculated for each cluster. This allows us to identify behavioral patterns and characteristics that distinguish different customer segments.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cluster_summary <span class="ot">&lt;-</span> customer_data <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cluster) <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_products =</span> <span class="fu">mean</span>(active_products),</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_logins =</span> <span class="fu">mean</span>(app_logins_frequency),</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_transactions =</span> <span class="fu">mean</span>(tx_count),</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_tx_value =</span> <span class="fu">mean</span>(avg_tx_value),</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_satisfaction =</span> <span class="fu">mean</span>(satisfaction_score),</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_nps =</span> <span class="fu">mean</span>(nps_score),</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_churn =</span> <span class="fu">mean</span>(churn_probability),</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_clv =</span> <span class="fu">mean</span>(customer_lifetime_value)</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>cluster_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>cluster_summary <span class="ot">&lt;-</span> customer_data <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_products =</span> <span class="fu">mean</span>(active_products),</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_logins =</span> <span class="fu">mean</span>(app_logins_frequency),</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_transactions =</span> <span class="fu">mean</span>(tx_count),</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_tx_value =</span> <span class="fu">mean</span>(avg_tx_value),</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_satisfaction =</span> <span class="fu">mean</span>(satisfaction_score),</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_nps =</span> <span class="fu">mean</span>(nps_score),</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_churn =</span> <span class="fu">mean</span>(churn_probability),</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_clv =</span> <span class="fu">mean</span>(customer_lifetime_value)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>cluster_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 10
   cluster avg_age avg_products avg_logins avg_transactions avg_tx_value
@@ -535,28 +612,58 @@ date (1): date
 </div>
 </div>
 </section>
+</section>
 <section id="cluster-profiling" class="level2">
 <h2 class="anchored" data-anchor-id="cluster-profiling">Cluster Profiling</h2>
 <p>To better compare the characteristics of different clusters, key behavioral and financial variables were visualized across clusters. This helps highlight the differences between customer segments.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(customer_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(cluster), <span class="at">y =</span> tx_count)) <span class="sc">+</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"orange"</span>) <span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Transaction Count by Cluster"</span>,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cluster"</span>,</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Transaction Count"</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(customer_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(cluster), <span class="at">y =</span> tx_count)) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"orange"</span>) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Transaction Count by Cluster"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cluster"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Transaction Count"</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="vis_project_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="vis_project_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The clustering results reveal distinct customer segments within the fintech platform. For instance, some clusters represent highly active customers with frequent transactions and high customer lifetime value, while others represent lower engagement users with fewer financial activities and higher churn probability.</p>
+<section id="comparison-of-cluster-characteristics" class="level3">
+<h3 class="anchored" data-anchor-id="comparison-of-cluster-characteristics">Comparison of Cluster Characteristics</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>cluster_profile_long <span class="ot">&lt;-</span> cluster_summary <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>cluster, <span class="at">names_to =</span> <span class="st">"metric"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cluster_profile_long,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> metric, <span class="at">y =</span> value, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> cluster)) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Comparison of Cluster Characteristics"</span>,</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Value"</span>,</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Cluster"</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="vis_project_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

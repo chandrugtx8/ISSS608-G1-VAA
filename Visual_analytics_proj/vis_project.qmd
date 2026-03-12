@@ -66,6 +66,27 @@ customer_lifetime_value
 )
 ```
 
+
+
+### Feature Correlation Heatmap
+
+The correlation heatmap was used to examine relationships between selected variables. Highly correlated variables were evaluated to avoid redundancy in clustering.
+
+```{r}
+library(corrplot)
+
+
+
+cor_matrix <- cor(cluster_data, use = "complete.obs")
+
+corrplot(cor_matrix,
+         method = "color",
+         type = "upper",
+         tl.cex = 0.7)
+```
+
+
+
 ## Handling Missing Values
 
 Before performing clustering, missing values were handled to ensure data quality and prevent errors during analysis. Observations containing missing values were removed to create a clean dataset for clustering.
@@ -109,7 +130,23 @@ plot(1:10, wss, type = "b",
 
 ```
 
+### Silhouette Analysis
 
+```{r}
+sil_width <- numeric(9)
+
+for (k in 2:10) {
+  km <- kmeans(cluster_sample, centers = k, nstart = 10)
+  ss <- silhouette(km$cluster, dist(cluster_sample))
+  sil_width[k - 1] <- mean(ss[, 3])
+}
+
+plot(2:10, sil_width, type = "b",
+     xlab = "Number of Clusters",
+     ylab = "Average Silhouette Width",
+     main = "Silhouette Analysis for Optimal Number of Clusters")
+     
+```
 
 
 ```{r}
@@ -155,6 +192,19 @@ To better understand the separation between clusters, the clustering results wer
 fviz_cluster(kmeans_model, data = cluster_scaled)
 ```
 
+
+### Variance Explained by Principal Components
+
+
+
+```{r}
+pca_model <- prcomp(cluster_scaled)
+
+fviz_eig(pca_model)
+
+
+```
+
 Analyze Cluster Characteristics
 
 To interpret the meaning of each cluster, the average values of key variables were calculated for each cluster. This allows us to identify behavioral patterns and characteristics that distinguish different customer segments.
@@ -192,3 +242,29 @@ ggplot(customer_data, aes(x = factor(cluster), y = tx_count)) +
 ```
 
 The clustering results reveal distinct customer segments within the fintech platform. For instance, some clusters represent highly active customers with frequent transactions and high customer lifetime value, while others represent lower engagement users with fewer financial activities and higher churn probability.
+
+
+### Comparison of Cluster Characteristics
+
+```{r}
+library(tidyr)
+
+cluster_profile_long <- cluster_summary %>%
+  pivot_longer(-cluster, names_to = "metric", values_to = "value")
+
+ggplot(cluster_profile_long,
+       aes(x = metric, y = value, color = factor(cluster), group = cluster)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  theme_minimal() +
+  labs(
+    title = "Comparison of Cluster Characteristics",
+    x = "Metric",
+    y = "Value",
+    color = "Cluster"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+
