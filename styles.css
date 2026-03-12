@@ -1,1 +1,168 @@
-/* css styles */
+/* ============================= */
+/* GENERAL PAGE STYLE */
+/* ============================= */
+
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background-color: #f7f8fb;
+  color: #222;
+  line-height: 1.7;
+}
+
+/* Control reading width */
+main.content {
+  max-width: 950px;
+}
+
+/* ============================= */
+/* NAVBAR */
+/* ============================= */
+
+.navbar {
+  background-color: #111 !important;
+  border-bottom: 1px solid #333;
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+  color: white !important;
+  font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #d4af37 !important;
+}
+
+/* ============================= */
+/* TITLE */
+/* ============================= */
+
+h1.title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #111;
+}
+
+/* ============================= */
+/* HEADINGS */
+/* ============================= */
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #e6e6e6;
+  padding-bottom: 6px;
+  color: #1a1a1a;
+}
+
+h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 25px;
+  color: #333;
+}
+
+h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+/* ============================= */
+/* PARAGRAPHS */
+/* ============================= */
+
+p {
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+}
+
+/* ============================= */
+/* LISTS */
+/* ============================= */
+
+ul li,
+ol li {
+  margin-bottom: 6px;
+  line-height: 1.7;
+}
+
+/* ============================= */
+/* TABLE OF CONTENTS */
+/* ============================= */
+
+#TOC {
+  background: white;
+  border-left: 4px solid #d4af37;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+#TOC .nav-link {
+  color: #444;
+}
+
+#TOC .nav-link.active {
+  color: #d4af37;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* CODE BLOCKS */
+/* ============================= */
+
+pre {
+  background: #f4f4f4;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+code {
+  background: #f2f2f2;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+/* ============================= */
+/* TABLES */
+/* ============================= */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+  background: white;
+}
+
+th {
+  background-color: #111;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+/* ============================= */
+/* IMAGES */
+/* ============================= */
+
+img {
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* ============================= */
+/* CALLOUT BLOCKS */
+/* ============================= */
+
+.callout {
+  border-left: 5px solid #d4af37;
+  border-radius: 8px;
+}

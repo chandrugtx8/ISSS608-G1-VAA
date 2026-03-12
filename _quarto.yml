@@ -54,6 +54,9 @@ format:
       - brand
     css: styles.css
     toc: true
+    toc-location: right
+    smooth-scroll: true
+    code-copy: true
 
 editor: visual
 

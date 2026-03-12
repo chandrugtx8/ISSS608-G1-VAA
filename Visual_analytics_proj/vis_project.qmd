@@ -2,6 +2,12 @@
 title: "COFINFAD: Colombian Fintech Cluster Analysis"
 ---
 
+
+## The Objective
+
+The objective of this project is to understand the behaviors behind customer transactions and how socio-demographic factors—such as age, income, and occupation—affect customer transactions. By applying statistical correlation techniques, we aim to identify which personal attributes are the true drivers of financial activity within the Colombian fintech ecosystem.
+
+
 ## Data Preparation
 
 The required R packages are loaded using the `pacman::p_load()` function, which automatically installs the packages if they are not already available and loads them into the working environment. These libraries support data manipulation, visualization, and clustering analysis required for the visual analytics application.
