@@ -1,5 +1,6 @@
 ---
 title: "COFINFAD: Colombian Fintech Cluster Analysis"
+author: "Chandru"
 ---
 
 ## The Objective
@@ -83,7 +84,7 @@ corrplot(cor_matrix,
          tl.cex = 0.7)
 ```
 
-The heatmap shows that several transaction-related variables are positively correlated, especially variables linked to transaction intensity and value. This is expected because customers who transact more frequently often also generate higher total activity. However, the correlations are not uniformly strong across all variables, suggesting that the selected features still capture different aspects of customer behavior and remain suitable for clustering.
+The heatmap indicates strong positive correlations among transaction-related variables such as transaction_frequency, monthly_transaction_count, and avg_tx_value, suggesting that customers who transact more frequently also tend to generate higher total financial activity. In contrast, engagement variables such as feature_usage_diversity and app_logins_frequency show moderate relationships with transaction metrics, indicating that behavioral engagement and financial value capture different dimensions of customer activity.
 
 ## Handling Missing Values
 
@@ -128,7 +129,7 @@ plot(1:10, wss, type = "b",
 
 ```
 
-The elbow plot suggests that the rate of improvement in within-cluster variation begins to slow after approximately 3 to 4 clusters. This indicates that additional clusters beyond this point may provide diminishing returns in segmentation quality.
+The elbow plot shows a sharp decrease in within-cluster sum of squares between k=1 and k=4, after which the improvement begins to diminish. This suggests that adding additional clusters beyond four provides limited reduction in within-cluster variance. Therefore, k = 4 appears to provide a good balance between model simplicity and cluster compactness.
 
 ### Silhouette Analysis
 
@@ -179,16 +180,22 @@ ggplot(customer_data, aes(x = factor(cluster))) +
   )
 ```
 
-The resulting cluster sizes are moderately imbalanced, with Cluster 2 representing the largest segment of customers. This suggests that one dominant customer profile exists in the fintech platform, while the remaining clusters capture smaller but still meaningful behavioral segments.
+The distribution shows that Cluster 2 contains the largest number of customers, indicating that a dominant behavioral pattern exists among platform users. In contrast, Clusters 1, 3, and 4 represent smaller but still meaningful segments. This imbalance suggests that while most customers share similar behavioral characteristics, smaller groups exhibit distinct financial engagement patterns.
 
 ## Cluster Visualization
 
 To better understand the separation between clusters, the clustering results were visualized using dimensionality reduction techniques. This visualization provides an overview of how customers are grouped based on their behavioral and financial characteristics.
 
 ```{r}
-fviz_cluster(kmeans_model, data = cluster_scaled)
+fviz_cluster(kmeans_model,
+             data = cluster_scaled,
+             geom = "point",
+             ellipse.type = "convex",
+             show.clust.cent = TRUE)
 ```
 
+
+The cluster visualization based on the first two principal components shows partial separation among clusters, indicating that the segmentation captures meaningful differences in customer behavior. Although some overlap exists, distinct cluster regions can still be observed, suggesting that the clusters represent moderately differentiated customer groups.
 ### Variance Explained by Principal Components
 
 ```{r}
@@ -199,7 +206,7 @@ fviz_eig(pca_model)
 
 ```
 
-The PCA-based cluster visualization shows that the identified customer segments are partially separable in lower-dimensional space. Although some overlap remains, the projection indicates that the selected variables provide sufficient structure to distinguish distinct customer groups.
+The scree plot indicates that the first few principal components explain a substantial proportion of the variance in the dataset. These components are therefore used to visualize the cluster structure in a reduced dimensional space.
 
 Analyze Cluster Characteristics
 
@@ -291,7 +298,7 @@ ggplot(customer_data, aes(x = factor(cluster), fill = income_bracket)) +
   )
 ```
 
-The proportional composition chart helps interpret cluster membership by showing how socio-demographic categories are distributed across the identified customer segments. This supports the practical interpretation of clusters beyond purely numeric summary statistics.
+The income composition chart shows that the majority of customers across all clusters fall within the medium income bracket, with relatively smaller proportions in the low, high, and very high income categories. The distributions are broadly similar across clusters, suggesting that income level alone is not the primary factor driving the clustering structure. Instead, the clusters appear to be more strongly differentiated by behavioral and engagement-related variables, such as transaction activity, app usage, and product adoption.
 
 ### Interpretation of Customer Segments
 
@@ -300,4 +307,4 @@ The proportional composition chart helps interpret cluster membership by showing
 -   **Cluster 3** represents a medium-activity segment with moderate transaction and engagement characteristics.
 -   **Cluster 4** appears to be a highly engaged digital segment, with the highest number of active products and app logins.
 
-## UI Design for Proposed Shiny Module
+

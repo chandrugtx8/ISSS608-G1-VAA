@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Chandru">
 
 <title>COFINFAD: Colombian Fintech Cluster Analysis – ISSS608-VAA</title>
 <style>
@@ -199,16 +200,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take_home_ex02.html">
  <span class="dropdown-text">Take home Exercise 2</span></a>
   </li>  
-    </ul>
-  </li>
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-project" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Project</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-project">    
         <li>
-    <a class="dropdown-item" href="../../Visual_analytics_proj/vis_project.html">
- <span class="dropdown-text">Visual analytics Project</span></a>
+    <a class="dropdown-item" href="../../Take-home_Ex/UI_design/ui_design.html">
+ <span class="dropdown-text">UI desgin</span></a>
   </li>  
     </ul>
   </li>
@@ -252,10 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering">K-Means Clustering</a></li>
   <li><a href="#cluster-distribution" id="toc-cluster-distribution" class="nav-link" data-scroll-target="#cluster-distribution">Cluster Distribution</a></li>
-  <li><a href="#cluster-visualization" id="toc-cluster-visualization" class="nav-link" data-scroll-target="#cluster-visualization">Cluster Visualization</a>
-  <ul class="collapse">
-  <li><a href="#variance-explained-by-principal-components" id="toc-variance-explained-by-principal-components" class="nav-link" data-scroll-target="#variance-explained-by-principal-components">Variance Explained by Principal Components</a></li>
-  </ul></li>
+  <li><a href="#cluster-visualization" id="toc-cluster-visualization" class="nav-link" data-scroll-target="#cluster-visualization">Cluster Visualization</a></li>
   <li><a href="#cluster-profiling" id="toc-cluster-profiling" class="nav-link" data-scroll-target="#cluster-profiling">Cluster Profiling</a>
   <ul class="collapse">
   <li><a href="#standardized-comparison-of-cluster-characteristics" id="toc-standardized-comparison-of-cluster-characteristics" class="nav-link" data-scroll-target="#standardized-comparison-of-cluster-characteristics">Standardized Comparison of Cluster Characteristics</a></li>
@@ -278,6 +269,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chandru </p>
+          </div>
+  </div>
     
   
     
@@ -290,7 +287,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="the-objective" class="level2">
 <h2 class="anchored" data-anchor-id="the-objective">The Objective</h2>
-<p>The objective of this project is to understand the behaviors behind customer transactions and how socio-demographic factors—such as age, income, and occupation—affect customer transactions. By applying statistical correlation techniques, we aim to identify which personal attributes are the true drivers of financial activity within the Colombian fintech ecosystem.</p>
+<p>The objective of this project is to understand the behaviors behind customer transactions and how socio demographic factors such as age, income, and occupation affect customer transactions. By applying statistical correlation techniques, we aim to identify which personal attributes are the true drivers of financial activity within the Colombian fintech ecosystem.</p>
+<p>Customer clustering techniques are used to group customers with similar financial behaviors and socio-demographic characteristics. By identifying distinct customer segments, the analysis provides insights into how different groups interact with fintech services, including their transaction patterns, savings behavior, and digital engagement levels.</p>
 </section>
 <section id="data-preparation" class="level2">
 <h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
@@ -448,7 +446,7 @@ date (1): date
 </div>
 </div>
 </div>
-<p>The heatmap shows that several transaction-related variables are positively correlated, especially variables linked to transaction intensity and value. This is expected because customers who transact more frequently often also generate higher total activity. However, the correlations are not uniformly strong across all variables, suggesting that the selected features still capture different aspects of customer behavior and remain suitable for clustering.</p>
+<p>The heatmap indicates strong positive correlations among transaction-related variables such as transaction_frequency, monthly_transaction_count, and avg_tx_value, suggesting that customers who transact more frequently also tend to generate higher total financial activity. In contrast, engagement variables such as feature_usage_diversity and app_logins_frequency show moderate relationships with transaction metrics, indicating that behavioral engagement and financial value capture different dimensions of customer activity.</p>
 </section>
 </section>
 <section id="handling-missing-values" class="level2">
@@ -496,7 +494,7 @@ date (1): date
 </div>
 </div>
 </div>
-<p>The elbow plot suggests that the rate of improvement in within-cluster variation begins to slow after approximately 3 to 4 clusters. This indicates that additional clusters beyond this point may provide diminishing returns in segmentation quality.</p>
+<p>The elbow plot shows a sharp decrease in within-cluster sum of squares between k=1 and k=4, after which the improvement begins to diminish. This suggests that adding additional clusters beyond four provides limited reduction in within-cluster variance. Therefore, k = 4 appears to provide a good balance between model simplicity and cluster compactness.</p>
 <section id="silhouette-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="silhouette-analysis">Silhouette Analysis</h3>
 <div class="cell">
@@ -560,13 +558,17 @@ date (1): date
 </div>
 </div>
 </div>
-<p>The resulting cluster sizes are moderately imbalanced, with Cluster 2 representing the largest segment of customers. This suggests that one dominant customer profile exists in the fintech platform, while the remaining clusters capture smaller but still meaningful behavioral segments.</p>
+<p>The distribution shows that Cluster 2 contains the largest number of customers, indicating that a dominant behavioral pattern exists among platform users. In contrast, Clusters 1, 3, and 4 represent smaller but still meaningful segments. This imbalance suggests that while most customers share similar behavioral characteristics, smaller groups exhibit distinct financial engagement patterns.</p>
 </section>
 <section id="cluster-visualization" class="level2">
 <h2 class="anchored" data-anchor-id="cluster-visualization">Cluster Visualization</h2>
 <p>To better understand the separation between clusters, the clustering results were visualized using dimensionality reduction techniques. This visualization provides an overview of how customers are grouped based on their behavioral and financial characteristics.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(kmeans_model, <span class="at">data =</span> cluster_scaled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(kmeans_model,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> cluster_scaled,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="st">"point"</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type =</span> <span class="st">"convex"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">show.clust.cent =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -575,8 +577,7 @@ date (1): date
 </div>
 </div>
 </div>
-<section id="variance-explained-by-principal-components" class="level3">
-<h3 class="anchored" data-anchor-id="variance-explained-by-principal-components">Variance Explained by Principal Components</h3>
+<p>The cluster visualization based on the first two principal components shows partial separation among clusters, indicating that the segmentation captures meaningful differences in customer behavior. Although some overlap exists, distinct cluster regions can still be observed, suggesting that the clusters represent moderately differentiated customer groups. ### Variance Explained by Principal Components</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pca_model <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(cluster_scaled)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -593,7 +594,7 @@ Ignoring empty aesthetic: `width`.</code></pre>
 </div>
 </div>
 </div>
-<p>The PCA-based cluster visualization shows that the identified customer segments are partially separable in lower-dimensional space. Although some overlap remains, the projection indicates that the selected variables provide sufficient structure to distinguish distinct customer groups.</p>
+<p>The scree plot indicates that the first few principal components explain a substantial proportion of the variance in the dataset. These components are therefore used to visualize the cluster structure in a reduced dimensional space.</p>
 <p>Analyze Cluster Characteristics</p>
 <p>To interpret the meaning of each cluster, the average values of key variables were calculated for each cluster. This allows us to identify behavioral patterns and characteristics that distinguish different customer segments.</p>
 <div class="cell">
@@ -625,7 +626,6 @@ Ignoring empty aesthetic: `width`.</code></pre>
 </div>
 </div>
 <p>The cluster summary shows meaningful differences across segments. Cluster 1 stands out for having the highest average transaction value and customer lifetime value, suggesting a high-value segment. Cluster 2 is the largest group but shows lower average transaction intensity and lower financial value, indicating a mainstream but less valuable segment. Cluster 4 stands out for having the highest number of active products and logins, suggesting a highly engaged digital segment. Cluster 3 appears to sit between these groups, with moderate engagement and transaction activity.</p>
-</section>
 </section>
 <section id="cluster-profiling" class="level2">
 <h2 class="anchored" data-anchor-id="cluster-profiling">Cluster Profiling</h2>
@@ -714,7 +714,7 @@ Ignoring empty aesthetic: `width`.</code></pre>
 </div>
 </div>
 </div>
-<p>The proportional composition chart helps interpret cluster membership by showing how socio-demographic categories are distributed across the identified customer segments. This supports the practical interpretation of clusters beyond purely numeric summary statistics.</p>
+<p>The income composition chart shows that the majority of customers across all clusters fall within the medium income bracket, with relatively smaller proportions in the low, high, and very high income categories. The distributions are broadly similar across clusters, suggesting that income level alone is not the primary factor driving the clustering structure. Instead, the clusters appear to be more strongly differentiated by behavioral and engagement-related variables, such as transaction activity, app usage, and product adoption.</p>
 </section>
 <section id="interpretation-of-customer-segments" class="level3">
 <h3 class="anchored" data-anchor-id="interpretation-of-customer-segments">Interpretation of Customer Segments</h3>
