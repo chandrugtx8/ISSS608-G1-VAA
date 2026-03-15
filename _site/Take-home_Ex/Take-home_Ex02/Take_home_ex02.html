@@ -196,7 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Take home Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../Visual_analytics_proj/vis_project.html">
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take_home_ex02.html">
  <span class="dropdown-text">Take home Exercise 2</span></a>
   </li>  
     </ul>
@@ -258,8 +258,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#cluster-profiling" id="toc-cluster-profiling" class="nav-link" data-scroll-target="#cluster-profiling">Cluster Profiling</a>
   <ul class="collapse">
-  <li><a href="#comparison-of-cluster-characteristics" id="toc-comparison-of-cluster-characteristics" class="nav-link" data-scroll-target="#comparison-of-cluster-characteristics">Comparison of Cluster Characteristics</a></li>
+  <li><a href="#standardized-comparison-of-cluster-characteristics" id="toc-standardized-comparison-of-cluster-characteristics" class="nav-link" data-scroll-target="#standardized-comparison-of-cluster-characteristics">Standardized Comparison of Cluster Characteristics</a></li>
+  <li><a href="#cluster-membership-composition" id="toc-cluster-membership-composition" class="nav-link" data-scroll-target="#cluster-membership-composition">Cluster Membership Composition</a></li>
+  <li><a href="#interpretation-of-customer-segments" id="toc-interpretation-of-customer-segments" class="nav-link" data-scroll-target="#interpretation-of-customer-segments">Interpretation of Customer Segments</a></li>
   </ul></li>
+  <li><a href="#ui-design-for-proposed-shiny-module" id="toc-ui-design-for-proposed-shiny-module" class="nav-link" data-scroll-target="#ui-design-for-proposed-shiny-module">UI Design for Proposed Shiny Module</a></li>
   </ul>
 </nav>
     </div>
@@ -302,7 +305,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 (as 'lib' is unspecified)</code></pre>
 </div>
 </div>
-<p>The COFINFAD dataset consists of two CSV files: customer_data.csv, which contains demographic, behavioral, and engagement information for 48,723 customers, and transactions_data.csv, which records over 3.1 million individual financial transactions. These datasets are loaded into R to enable further preprocessing, exploratory analysis, and customer segmentation through clustering techniques.</p>
+<p>The COFINFAD dataset consists of two files: a customer-level dataset containing 48,723 customer records and a transaction-level dataset containing over 3.1 million transaction entries. The customer dataset provides demographic, behavioral, engagement, and satisfaction attributes, while the transaction dataset stores transaction-level records including amount, date, and transaction type.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import datasets</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Import datasets</span></span>
@@ -405,7 +408,7 @@ date (1): date
 </section>
 <section id="variable-selection-for-clustering" class="level2">
 <h2 class="anchored" data-anchor-id="variable-selection-for-clustering">Variable Selection for Clustering</h2>
-<p>To perform customer segmentation, a subset of relevant behavioral, engagement, and financial variables was selected from the customer dataset. These variables capture different dimensions of customer activity within the fintech platform and help identify meaningful customer segments.</p>
+<p>The selected variables were chosen to represent multiple dimensions of customer behavior. Variables such as <code>tx_count</code>, <code>avg_tx_value</code>, <code>monthly_transaction_count</code>, and <code>transaction_frequency</code> capture transaction intensity, while <code>active_products</code>, <code>app_logins_frequency</code>, and <code>feature_usage_diversity</code> reflect platform engagement. <code>satisfaction_score</code>, <code>nps_score</code>, and <code>churn_probability</code> were included to account for customer sentiment and retention risk, and <code>customer_lifetime_value</code> was included to reflect long-term business value.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cluster_data <span class="ot">&lt;-</span> customer_data <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(</span>
@@ -445,6 +448,7 @@ date (1): date
 </div>
 </div>
 </div>
+<p>The heatmap shows that several transaction-related variables are positively correlated, especially variables linked to transaction intensity and value. This is expected because customers who transact more frequently often also generate higher total activity. However, the correlations are not uniformly strong across all variables, suggesting that the selected features still capture different aspects of customer behavior and remain suitable for clustering.</p>
 </section>
 </section>
 <section id="handling-missing-values" class="level2">
@@ -463,7 +467,7 @@ date (1): date
 </section>
 <section id="determining-the-optimal-number-of-clusters" class="level2">
 <h2 class="anchored" data-anchor-id="determining-the-optimal-number-of-clusters">Determining the Optimal Number of Clusters</h2>
-<p>Because the dataset is relatively large, a random sample was used to determine the optimal number of clusters using the Elbow Method. This reduces memory usage while still providing a reliable estimate of the appropriate cluster count.</p>
+<p>K-means clustering was selected because the chosen variables are primarily continuous numeric measures that describe customer behavior, engagement, and financial activity. After standardization, K-means provides a simple and interpretable way to group customers based on similarity across these dimensions.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -492,6 +496,7 @@ date (1): date
 </div>
 </div>
 </div>
+<p>The elbow plot suggests that the rate of improvement in within-cluster variation begins to slow after approximately 3 to 4 clusters. This indicates that additional clusters beyond this point may provide diminishing returns in segmentation quality.</p>
 <section id="silhouette-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="silhouette-analysis">Silhouette Analysis</h3>
 <div class="cell">
@@ -515,6 +520,7 @@ date (1): date
 </div>
 </div>
 </div>
+<p>The silhouette analysis shows that the highest average silhouette width is achieved at 3 clusters, while 4 clusters also produces a relatively strong result. Since 4 clusters provides a more detailed and interpretable segmentation structure while maintaining acceptable cluster quality, it was selected for the final K-means model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(cluster_scaled, <span class="at">centers =</span> <span class="dv">4</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -523,16 +529,13 @@ date (1): date
 </section>
 <section id="k-means-clustering" class="level2">
 <h2 class="anchored" data-anchor-id="k-means-clustering">K-Means Clustering</h2>
-<p>Assign Cluster Labels to Dataset</p>
-<p>After performing K-Means clustering, the cluster labels generated by the algorithm were appended to the dataset. This allows each customer to be associated with a specific cluster for further analysis and visualization.</p>
+<p>The final clustering model was estimated using K-means with 4 clusters and 25 random starts to improve stability and reduce the chance of converging to a poor local solution.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>customer_data<span class="sc">$</span>cluster <span class="ot">&lt;-</span> kmeans_model<span class="sc">$</span>cluster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="cluster-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="cluster-distribution">Cluster Distribution</h2>
-<p>The distribution of customers across clusters was examined to understand how the dataset was segmented. This helps identify whether the clusters are balanced or dominated by a particular group.</p>
-<p>Code</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(customer_data<span class="sc">$</span>cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -557,6 +560,7 @@ date (1): date
 </div>
 </div>
 </div>
+<p>The resulting cluster sizes are moderately imbalanced, with Cluster 2 representing the largest segment of customers. This suggests that one dominant customer profile exists in the fintech platform, while the remaining clusters capture smaller but still meaningful behavioral segments.</p>
 </section>
 <section id="cluster-visualization" class="level2">
 <h2 class="anchored" data-anchor-id="cluster-visualization">Cluster Visualization</h2>
@@ -589,6 +593,7 @@ Ignoring empty aesthetic: `width`.</code></pre>
 </div>
 </div>
 </div>
+<p>The PCA-based cluster visualization shows that the identified customer segments are partially separable in lower-dimensional space. Although some overlap remains, the projection indicates that the selected variables provide sufficient structure to distinguish distinct customer groups.</p>
 <p>Analyze Cluster Characteristics</p>
 <p>To interpret the meaning of each cluster, the average values of key variables were calculated for each cluster. This allows us to identify behavioral patterns and characteristics that distinguish different customer segments.</p>
 <div class="cell">
@@ -619,6 +624,7 @@ Ignoring empty aesthetic: `width`.</code></pre>
 #   avg_clv &lt;dbl&gt;</code></pre>
 </div>
 </div>
+<p>The cluster summary shows meaningful differences across segments. Cluster 1 stands out for having the highest average transaction value and customer lifetime value, suggesting a high-value segment. Cluster 2 is the largest group but shows lower average transaction intensity and lower financial value, indicating a mainstream but less valuable segment. Cluster 4 stands out for having the highest number of active products and logins, suggesting a highly engaged digital segment. Cluster 3 appears to sit between these groups, with moderate engagement and transaction activity.</p>
 </section>
 </section>
 <section id="cluster-profiling" class="level2">
@@ -641,26 +647,14 @@ Ignoring empty aesthetic: `width`.</code></pre>
 </div>
 </div>
 <p>The clustering results reveal distinct customer segments within the fintech platform. For instance, some clusters represent highly active customers with frequent transactions and high customer lifetime value, while others represent lower engagement users with fewer financial activities and higher churn probability.</p>
-<section id="comparison-of-cluster-characteristics" class="level3">
-<h3 class="anchored" data-anchor-id="comparison-of-cluster-characteristics">Comparison of Cluster Characteristics</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>cluster_profile_long <span class="ot">&lt;-</span> cluster_summary <span class="sc">%&gt;%</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>cluster, <span class="at">names_to =</span> <span class="st">"metric"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cluster_profile_long,</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> metric, <span class="at">y =</span> value, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> cluster)) <span class="sc">+</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Comparison of Cluster Characteristics"</span>,</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Metric"</span>,</span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Value"</span>,</span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Cluster"</span></span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(customer_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(cluster), <span class="at">y =</span> avg_tx_value)) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"skyblue"</span>) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Transaction Value by Cluster"</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cluster"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average Transaction Value"</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -669,9 +663,73 @@ Ignoring empty aesthetic: `width`.</code></pre>
 </div>
 </div>
 </div>
-
-
+<p>The profiling plots confirm that clusters differ not only in transaction count but also in financial value and engagement intensity. This suggests that the identified segments are behaviorally meaningful and can be used to distinguish high-value, low-activity, and digitally engaged customer groups.</p>
+<section id="standardized-comparison-of-cluster-characteristics" class="level3">
+<h3 class="anchored" data-anchor-id="standardized-comparison-of-cluster-characteristics">Standardized Comparison of Cluster Characteristics</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>cluster_profile_long <span class="ot">&lt;-</span> cluster_summary <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>cluster, <span class="at">names_to =</span> <span class="st">"metric"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(metric) <span class="sc">%&gt;%</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">value_scaled =</span> <span class="fu">as.numeric</span>(<span class="fu">scale</span>(value)))</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cluster_profile_long,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> metric, <span class="at">y =</span> value_scaled, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> cluster)) <span class="sc">+</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Standardized Comparison of Cluster Characteristics"</span>,</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Standardized Value"</span>,</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Cluster"</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_home_ex02_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Because the metrics are measured on very different scales, the cluster comparison values were standardized before plotting. This makes it easier to compare relative differences across clusters without the chart being dominated by high-magnitude variables such as customer lifetime value.</p>
 </section>
+<section id="cluster-membership-composition" class="level3">
+<h3 class="anchored" data-anchor-id="cluster-membership-composition">Cluster Membership Composition</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(customer_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(cluster), <span class="at">fill =</span> income_bracket)) <span class="sc">+</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Income Bracket Composition Across Clusters"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cluster"</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion"</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take_home_ex02_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The proportional composition chart helps interpret cluster membership by showing how socio-demographic categories are distributed across the identified customer segments. This supports the practical interpretation of clusters beyond purely numeric summary statistics.</p>
+</section>
+<section id="interpretation-of-customer-segments" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation-of-customer-segments">Interpretation of Customer Segments</h3>
+<ul>
+<li><strong>Cluster 1</strong> appears to represent a high-value segment with the highest average transaction value and customer lifetime value.</li>
+<li><strong>Cluster 2</strong> is the largest segment and likely represents mainstream customers with moderate engagement and lower financial value.</li>
+<li><strong>Cluster 3</strong> represents a medium-activity segment with moderate transaction and engagement characteristics.</li>
+<li><strong>Cluster 4</strong> appears to be a highly engaged digital segment, with the highest number of active products and app logins.</li>
+</ul>
+</section>
+</section>
+<section id="ui-design-for-proposed-shiny-module" class="level2">
+<h2 class="anchored" data-anchor-id="ui-design-for-proposed-shiny-module">UI Design for Proposed Shiny Module</h2>
+
+
 </section>
 
 </main> <!-- /main -->

@@ -4,7 +4,9 @@ title: "COFINFAD: Colombian Fintech Cluster Analysis"
 
 ## The Objective
 
-The objective of this project is to understand the behaviors behind customer transactions and how socio-demographic factors—such as age, income, and occupation—affect customer transactions. By applying statistical correlation techniques, we aim to identify which personal attributes are the true drivers of financial activity within the Colombian fintech ecosystem.
+The objective of this project is to understand the behaviors behind customer transactions and how socio demographic factors such as age, income, and occupation affect customer transactions. By applying statistical correlation techniques, we aim to identify which personal attributes are the true drivers of financial activity within the Colombian fintech ecosystem.
+
+Customer clustering techniques are used to group customers with similar financial behaviors and socio-demographic characteristics. By identifying distinct customer segments, the analysis provides insights into how different groups interact with fintech services, including their transaction patterns, savings behavior, and digital engagement levels.
 
 ## Data Preparation
 
@@ -18,7 +20,7 @@ pacman::p_load(ggrepel, patchwork,
 
 ```
 
-The COFINFAD dataset consists of two CSV files: customer_data.csv, which contains demographic, behavioral, and engagement information for 48,723 customers, and transactions_data.csv, which records over 3.1 million individual financial transactions. These datasets are loaded into R to enable further preprocessing, exploratory analysis, and customer segmentation through clustering techniques.
+The COFINFAD dataset consists of two files: a customer-level dataset containing 48,723 customer records and a transaction-level dataset containing over 3.1 million transaction entries. The customer dataset provides demographic, behavioral, engagement, and satisfaction attributes, while the transaction dataset stores transaction-level records including amount, date, and transaction type.
 
 ```{r}
 
@@ -44,7 +46,7 @@ colnames(transactions_data)
 
 ## Variable Selection for Clustering
 
-To perform customer segmentation, a subset of relevant behavioral, engagement, and financial variables was selected from the customer dataset. These variables capture different dimensions of customer activity within the fintech platform and help identify meaningful customer segments.
+The selected variables were chosen to represent multiple dimensions of customer behavior. Variables such as `tx_count`, `avg_tx_value`, `monthly_transaction_count`, and `transaction_frequency` capture transaction intensity, while `active_products`, `app_logins_frequency`, and `feature_usage_diversity` reflect platform engagement. `satisfaction_score`, `nps_score`, and `churn_probability` were included to account for customer sentiment and retention risk, and `customer_lifetime_value` was included to reflect long-term business value.
 
 ```{r}
 cluster_data <- customer_data %>%
@@ -81,6 +83,8 @@ corrplot(cor_matrix,
          tl.cex = 0.7)
 ```
 
+The heatmap shows that several transaction-related variables are positively correlated, especially variables linked to transaction intensity and value. This is expected because customers who transact more frequently often also generate higher total activity. However, the correlations are not uniformly strong across all variables, suggesting that the selected features still capture different aspects of customer behavior and remain suitable for clustering.
+
 ## Handling Missing Values
 
 Before performing clustering, missing values were handled to ensure data quality and prevent errors during analysis. Observations containing missing values were removed to create a clean dataset for clustering.
@@ -99,7 +103,7 @@ cluster_scaled <- scale(cluster_data)
 
 ## Determining the Optimal Number of Clusters
 
-Because the dataset is relatively large, a random sample was used to determine the optimal number of clusters using the Elbow Method. This reduces memory usage while still providing a reliable estimate of the appropriate cluster count.
+K-means clustering was selected because the chosen variables are primarily continuous numeric measures that describe customer behavior, engagement, and financial activity. After standardization, K-means provides a simple and interpretable way to group customers based on similarity across these dimensions.
 
 ```{r}
 set.seed(123)
@@ -124,6 +128,8 @@ plot(1:10, wss, type = "b",
 
 ```
 
+The elbow plot suggests that the rate of improvement in within-cluster variation begins to slow after approximately 3 to 4 clusters. This indicates that additional clusters beyond this point may provide diminishing returns in segmentation quality.
+
 ### Silhouette Analysis
 
 ```{r}
@@ -142,6 +148,8 @@ plot(2:10, sil_width, type = "b",
      
 ```
 
+The silhouette analysis shows that the highest average silhouette width is achieved at 3 clusters, while 4 clusters also produces a relatively strong result. Since 4 clusters provides a more detailed and interpretable segmentation structure while maintaining acceptable cluster quality, it was selected for the final K-means model.
+
 ```{r}
 set.seed(123)
 kmeans_model <- kmeans(cluster_scaled, centers = 4, nstart = 25)
@@ -149,19 +157,13 @@ kmeans_model <- kmeans(cluster_scaled, centers = 4, nstart = 25)
 
 ## K-Means Clustering
 
-Assign Cluster Labels to Dataset
-
-After performing K-Means clustering, the cluster labels generated by the algorithm were appended to the dataset. This allows each customer to be associated with a specific cluster for further analysis and visualization.
+The final clustering model was estimated using K-means with 4 clusters and 25 random starts to improve stability and reduce the chance of converging to a poor local solution.
 
 ```{r}
 customer_data$cluster <- kmeans_model$cluster
 ```
 
 ## Cluster Distribution
-
-The distribution of customers across clusters was examined to understand how the dataset was segmented. This helps identify whether the clusters are balanced or dominated by a particular group.
-
-Code
 
 ```{r}
 table(customer_data$cluster)
@@ -176,6 +178,8 @@ ggplot(customer_data, aes(x = factor(cluster))) +
     y = "Number of Customers"
   )
 ```
+
+The resulting cluster sizes are moderately imbalanced, with Cluster 2 representing the largest segment of customers. This suggests that one dominant customer profile exists in the fintech platform, while the remaining clusters capture smaller but still meaningful behavioral segments.
 
 ## Cluster Visualization
 
@@ -194,6 +198,8 @@ fviz_eig(pca_model)
 
 
 ```
+
+The PCA-based cluster visualization shows that the identified customer segments are partially separable in lower-dimensional space. Although some overlap remains, the projection indicates that the selected variables provide sufficient structure to distinguish distinct customer groups.
 
 Analyze Cluster Characteristics
 
@@ -217,6 +223,8 @@ cluster_summary <- customer_data %>%
 cluster_summary
 ```
 
+The cluster summary shows meaningful differences across segments. Cluster 1 stands out for having the highest average transaction value and customer lifetime value, suggesting a high-value segment. Cluster 2 is the largest group but shows lower average transaction intensity and lower financial value, indicating a mainstream but less valuable segment. Cluster 4 stands out for having the highest number of active products and logins, suggesting a highly engaged digital segment. Cluster 3 appears to sit between these groups, with moderate engagement and transaction activity.
+
 ## Cluster Profiling
 
 To better compare the characteristics of different clusters, key behavioral and financial variables were visualized across clusters. This helps highlight the differences between customer segments.
@@ -233,24 +241,63 @@ ggplot(customer_data, aes(x = factor(cluster), y = tx_count)) +
 
 The clustering results reveal distinct customer segments within the fintech platform. For instance, some clusters represent highly active customers with frequent transactions and high customer lifetime value, while others represent lower engagement users with fewer financial activities and higher churn probability.
 
-### Comparison of Cluster Characteristics
+```{r}
+ggplot(customer_data, aes(x = factor(cluster), y = avg_tx_value)) +
+  geom_boxplot(fill = "skyblue") +
+  labs(
+    title = "Average Transaction Value by Cluster",
+    x = "Cluster",
+    y = "Average Transaction Value"
+  )
+```
+
+The profiling plots confirm that clusters differ not only in transaction count but also in financial value and engagement intensity. This suggests that the identified segments are behaviorally meaningful and can be used to distinguish high-value, low-activity, and digitally engaged customer groups.
+
+### Standardized Comparison of Cluster Characteristics
 
 ```{r}
 library(tidyr)
 
 cluster_profile_long <- cluster_summary %>%
-  pivot_longer(-cluster, names_to = "metric", values_to = "value")
+  pivot_longer(-cluster, names_to = "metric", values_to = "value") %>%
+  group_by(metric) %>%
+  mutate(value_scaled = as.numeric(scale(value)))
 
 ggplot(cluster_profile_long,
-       aes(x = metric, y = value, color = factor(cluster), group = cluster)) +
+       aes(x = metric, y = value_scaled, color = factor(cluster), group = cluster)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   theme_minimal() +
   labs(
-    title = "Comparison of Cluster Characteristics",
+    title = "Standardized Comparison of Cluster Characteristics",
     x = "Metric",
-    y = "Value",
+    y = "Standardized Value",
     color = "Cluster"
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+Because the metrics are measured on very different scales, the cluster comparison values were standardized before plotting. This makes it easier to compare relative differences across clusters without the chart being dominated by high-magnitude variables such as customer lifetime value.
+
+### Cluster Membership Composition
+
+```{r}
+ggplot(customer_data, aes(x = factor(cluster), fill = income_bracket)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Income Bracket Composition Across Clusters",
+    x = "Cluster",
+    y = "Proportion"
+  )
+```
+
+The proportional composition chart helps interpret cluster membership by showing how socio-demographic categories are distributed across the identified customer segments. This supports the practical interpretation of clusters beyond purely numeric summary statistics.
+
+### Interpretation of Customer Segments
+
+-   **Cluster 1** appears to represent a high-value segment with the highest average transaction value and customer lifetime value.
+-   **Cluster 2** is the largest segment and likely represents mainstream customers with moderate engagement and lower financial value.
+-   **Cluster 3** represents a medium-activity segment with moderate transaction and engagement characteristics.
+-   **Cluster 4** appears to be a highly engaged digital segment, with the highest number of active products and app logins.
+
+## UI Design for Proposed Shiny Module
